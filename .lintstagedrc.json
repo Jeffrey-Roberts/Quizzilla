@@ -1,0 +1,12 @@
+{
+  "**/*.{js,jsx,ts,tsx}": [
+    "npm run fix:prettier",
+    "npm run check:lint --max-warnings=0",
+    "npm run test -- --findRelatedTests --passWithNoTests"
+  ],
+  "*.html": [
+    "eslint",
+    "prettier --write"
+  ],
+  "*.scss": "prettier --write"
+}
