@@ -75,6 +75,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     paddingTop: Constants.statusBarHeight,
     backgroundColor: '#25292e',
     alignItems: 'center',
@@ -89,6 +90,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   innerContainer: {
+    flex: 1,
     width: '100%',
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
