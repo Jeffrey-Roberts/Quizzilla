@@ -6,8 +6,6 @@ import App from '../src/App';
 describe('App', () => {
   it('renders the Text', () => {
     render(<App />);
-    expect(
-      screen.getByText('Open up App.tsx to start working on your app!')
-    ).toBeTruthy();
+    expect(screen.getByLabelText('root')).toBeTruthy();
   });
 });
