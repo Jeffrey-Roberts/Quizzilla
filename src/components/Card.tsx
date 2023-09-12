@@ -2,13 +2,15 @@ import { FC } from 'react';
 import { Text, View } from 'react-native';
 
 export type CardProps = {
+  id: number;
   term: string;
   definition: string;
 };
 
-const Card: FC<CardProps> = ({ term, definition }) => {
+const Card: FC<CardProps> = ({ id, term, definition }) => {
   return (
     <View
+      aria-label={`card-${id}`}
       style={{
         backgroundColor: '#fff',
         padding: 20,

@@ -1,6 +1,7 @@
 import Constants from 'expo-constants';
 import { StatusBar } from 'expo-status-bar';
-import { FlatList, TextInput, StyleSheet, View } from 'react-native';
+import { useState } from 'react';
+import { FlatList, TextInput, StyleSheet, View, Keyboard } from 'react-native';
 
 import Card from './components/Card';
 import QuizzillaButton from './components/QuizzillaButton';
@@ -8,64 +9,70 @@ import QuizzillaButton from './components/QuizzillaButton';
 export default function App() {
   const DATA = [
     {
-      id: '1',
+      id: 1,
       term: 'Term 1',
       definition:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur euismod, turpis id tristique porttitor, odio nisl luctus libero, eu efficitur ex dolor eu velit. Duis vel tortor auctor, cursus diam a, maximus lectus. Praesent euismod, mi nec aliquet ornare, diam libero eleifend tortor, sed luctus neque arcu vel orci. Nam euismod, turpis a rutrum viverra, est dolor ultricies nunc, sed eleifend orci elit non enim. Duis id risus euismod, efficitur nunc et, tincidunt lectus. Proin et odio eu diam posuere aliquam. Nulla facilisi. Mauris auctor, nunc vitae fringilla faucibus, massa urna consectetur eros, eu placerat nunc ipsum in diam. Donec pellentesque, nibh sed efficitur pharetra, lectus nunc dapibus odio, ac posuere quam nunc nec massa. Proin euismod, elit a mollis tincidunt, enim nisl faucibus odio, nec consectetur sapien neque vitae lacus. Aliquam vitae elit auctor, pharetra nisl at, aliquet turpis. Morbi eget turpis auctor, pretium lorem a, vestibulum dui.',
     },
-    {
-      id: '2',
-      term: 'Term 2',
-      definition: 'Definition 2',
-    },
-    {
-      id: '3',
-      term: 'Term 3',
-      definition: 'Definition 3',
-    },
-    {
-      id: '4',
-      term: 'Term 4',
-      definition: 'Definition 4',
-    },
-    {
-      id: '5',
-      term: 'Term 5',
-      definition: 'Definition 5',
-    },
-    {
-      id: '6',
-      term: 'Term 6',
-      definition: 'Definition 6',
-    },
-    {
-      id: '7',
-      term: 'Term 7',
-      definition: 'Definition 7',
-    },
   ];
+
+  const [termInputValue, setTermInputValue] = useState('');
+  const [definitionInputValue, setDefinitionInputValue] = useState('');
+  const [data, setData] = useState(DATA);
+
+  const handleAdd = () => {
+    if (termInputValue && definitionInputValue) {
+      const newData = [
+        ...data,
+        {
+          id: data.length + 1,
+          term: termInputValue,
+          definition: definitionInputValue,
+        },
+      ];
+      setData(newData);
+      setTermInputValue('');
+      setDefinitionInputValue('');
+      Keyboard.dismiss();
+    }
+  };
+
   return (
     <View aria-label={'root'} style={styles.container}>
-      <TextInput style={styles.textInput} placeholder={'Enter term'} />
       <TextInput
+        aria-label={'term input'}
+        style={styles.textInput}
+        placeholder={'Enter term'}
+        value={termInputValue}
+        onChange={(e) => setTermInputValue(e.nativeEvent.text)}
+      />
+      <TextInput
+        aria-label={'definition input'}
         style={[styles.textInput, { height: 100 }]}
         placeholder={'Enter definition'}
         multiline
         numberOfLines={4}
+        value={definitionInputValue}
+        onChange={(e) => setDefinitionInputValue(e.nativeEvent.text)}
       />
-      <QuizzillaButton text={'Test'} onPress={() => console.log('test')} />
+      <QuizzillaButton
+        text={'Add'}
+        label={'submit button'}
+        onPress={handleAdd}
+      />
       <View style={styles.innerContainer}>
         <FlatList
-          data={DATA}
+          data={data}
           renderItem={({ item }) => (
-            <Card term={item.term} definition={item.definition} />
+            <Card id={item.id} term={item.term} definition={item.definition} />
           )}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={{
             marginTop: 20,
             alignItems: 'center',
             flexGrow: 1,
           }}
+          extraData={data}
         />
       </View>
       <StatusBar style="light" />

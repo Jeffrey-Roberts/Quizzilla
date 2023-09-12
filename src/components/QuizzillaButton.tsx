@@ -3,12 +3,18 @@ import { Text, TouchableOpacity } from 'react-native';
 
 export type QuizzillaButtonProps = {
   text: string;
+  label?: string;
   onPress: () => void;
 };
 
-const QuizzillaButton: FC<QuizzillaButtonProps> = ({ text, onPress }) => {
+const QuizzillaButton: FC<QuizzillaButtonProps> = ({
+  text,
+  label,
+  onPress,
+}) => {
   return (
     <TouchableOpacity
+      aria-label={label}
       onPress={onPress}
       style={{
         backgroundColor: '#fff',
