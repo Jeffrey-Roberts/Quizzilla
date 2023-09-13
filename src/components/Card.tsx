@@ -12,7 +12,7 @@ const Card: FC<CardProps> = ({ id, term, definition }) => {
     <View
       aria-label={`card-${id}`}
       style={{
-        backgroundColor: '#fff',
+        backgroundColor: '#242629',
         padding: 20,
         borderRadius: 5,
         minWidth: '90%',
@@ -29,8 +29,10 @@ const Card: FC<CardProps> = ({ id, term, definition }) => {
         elevation: 2,
       }}
     >
-      <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{term}</Text>
-      <Text style={{ marginTop: 10 }}>{definition}</Text>
+      <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#fffffe' }}>
+        {term}
+      </Text>
+      <Text style={{ marginTop: 10, color: '#94a1b2' }}>{definition}</Text>
     </View>
   );
 };

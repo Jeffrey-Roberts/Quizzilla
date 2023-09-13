@@ -83,14 +83,15 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Constants.statusBarHeight,
-    backgroundColor: '#25292e',
+    paddingTop: Constants.statusBarHeight + 20,
+    backgroundColor: '#242629',
     alignItems: 'center',
     width: '100%',
     height: '100%',
   },
   textInput: {
     width: '80%',
+    fontWeight: 'bold',
     backgroundColor: '#fff',
     padding: 15,
     borderRadius: 5,
@@ -103,6 +104,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 40,
     marginTop: 20,
     padding: 10,
-    backgroundColor: 'purple',
+    backgroundColor: '#16161a',
   },
 });

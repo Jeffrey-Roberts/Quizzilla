@@ -17,14 +17,14 @@ const QuizzillaButton: FC<QuizzillaButtonProps> = ({
       aria-label={label}
       onPress={onPress}
       style={{
-        backgroundColor: '#fff',
+        backgroundColor: '#7f5af0',
         padding: 10,
         borderRadius: 5,
         width: '80%',
         alignItems: 'center',
       }}
     >
-      <Text style={{ color: '#000' }}>{text}</Text>
+      <Text style={{ color: '#fffffe', fontWeight: 'bold' }}>{text}</Text>
     </TouchableOpacity>
   );
 };
