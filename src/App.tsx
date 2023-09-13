@@ -75,7 +75,7 @@ export default function App() {
           extraData={data}
         />
       </View>
-      <StatusBar style="light" />
+      <StatusBar style={'light'} />
     </View>
   );
 }
