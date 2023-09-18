@@ -1,9 +1,13 @@
 import { Stack } from 'expo-router';
 
+import { QuizzillaCProvider } from '../src/modules/QuizzillaContext';
+
 export default function Page() {
   return (
-    <Stack>
-      <Stack.Screen name={'(tabs)'} options={{ headerShown: false }} />
-    </Stack>
+    <QuizzillaCProvider>
+      <Stack>
+        <Stack.Screen name={'(tabs)'} options={{ headerShown: false }} />
+      </Stack>
+    </QuizzillaCProvider>
   );
 }
