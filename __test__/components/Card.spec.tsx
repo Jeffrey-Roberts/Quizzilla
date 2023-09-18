@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react-native';
 import React from 'react';
 
-import Card from '../../src/components/Card';
+import QuizzillaDisplayCard from '../../src/components/QuizzillaDisplayCard';
 
 test('renders card text and definition', () => {
   const card = {
@@ -9,7 +9,11 @@ test('renders card text and definition', () => {
     definition: 'Test Definition',
   };
   const { getByText } = render(
-    <Card term={card.term} definition={card.definition} />
+    <QuizzillaDisplayCard
+      id={1}
+      term={card.term}
+      definition={card.definition}
+    />
   );
   const term = getByText(card.term);
   const definition = getByText(card.definition);

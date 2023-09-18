@@ -7,19 +7,38 @@ export default function HomeLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: '#7f5af0',
-        tabBarIcon: ({ color }) => (
-          <Ionicons
-            name="home"
-            size={28}
-            style={{ marginBottom: -3 }}
-            color={color}
-          />
-        ),
         headerShown: false,
         tabBarStyle: { backgroundColor: 'black', borderTopWidth: 0 },
       }}
     >
-      <Tabs.Screen name="index" options={{ title: 'Home' }} />
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: 'Home',
+          tabBarIcon: ({ color }) => (
+            <Ionicons
+              name="home"
+              size={28}
+              style={{ marginBottom: -3 }}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="flash-cards"
+        options={{
+          title: 'Flash Cards',
+          tabBarIcon: ({ color }) => (
+            <Ionicons
+              name="card"
+              size={28}
+              style={{ marginBottom: -3 }}
+              color={color}
+            />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

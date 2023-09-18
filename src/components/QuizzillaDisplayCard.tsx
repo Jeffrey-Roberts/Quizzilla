@@ -7,7 +7,7 @@ export type CardProps = {
   definition: string;
 };
 
-const Card: FC<CardProps> = ({ id, term, definition }) => {
+const QuizzillaDisplayCard: FC<CardProps> = ({ id, term, definition }) => {
   return (
     <View
       aria-label={`card-${id}`}
@@ -37,4 +37,4 @@ const Card: FC<CardProps> = ({ id, term, definition }) => {
   );
 };
 
-export default Card;
+export default QuizzillaDisplayCard;

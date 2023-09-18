@@ -1,10 +1,10 @@
-import Constants from 'expo-constants';
 import { StatusBar } from 'expo-status-bar';
 import { useContext, useState } from 'react';
 import { FlatList, TextInput, StyleSheet, View, Keyboard } from 'react-native';
 
-import Card from './components/Card';
 import QuizzillaButton from './components/QuizzillaButton';
+import QuizzillaDisplayCard from './components/QuizzillaDisplayCard';
+import QuizzillaView from './components/QuizzillaView';
 import { QuizzillaContext } from './modules/QuizzillaContext';
 
 export default function App() {
@@ -16,7 +16,7 @@ export default function App() {
   const handleAdd = () => {
     if (termInputValue && definitionInputValue) {
       const newData = {
-        id: data.length + 1,
+        id: data.length > 0 ? data[data.length - 1].id + 1 : 1,
         term: termInputValue,
         definition: definitionInputValue,
       };
@@ -28,7 +28,7 @@ export default function App() {
   };
 
   return (
-    <View aria-label={'root'} style={styles.container}>
+    <QuizzillaView>
       <TextInput
         aria-label={'term input'}
         style={styles.textInput}
@@ -54,7 +54,11 @@ export default function App() {
         <FlatList
           data={data}
           renderItem={({ item }) => (
-            <Card id={item.id} term={item.term} definition={item.definition} />
+            <QuizzillaDisplayCard
+              id={item.id}
+              term={item.term}
+              definition={item.definition}
+            />
           )}
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={{
@@ -66,19 +70,11 @@ export default function App() {
         />
       </View>
       <StatusBar style={'light'} />
-    </View>
+    </QuizzillaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: Constants.statusBarHeight + 20,
-    backgroundColor: '#242629',
-    alignItems: 'center',
-    width: '100%',
-    height: '100%',
-  },
   textInput: {
     width: '80%',
     fontWeight: 'bold',
