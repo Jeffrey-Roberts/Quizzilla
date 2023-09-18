@@ -10,7 +10,11 @@ export default function FlashCardScreen() {
   return (
     <QuizzillaView>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        {data.length > 0 ? <Text>data[0].term</Text> : <Text>No data</Text>}
+        {data.length > 0 ? (
+          <Text style={{ color: '#FFF' }}>{data[0].term}</Text>
+        ) : (
+          <Text>No data</Text>
+        )}
       </View>
     </QuizzillaView>
   );
