@@ -10,7 +10,7 @@ export default function FlashCardScreen() {
 
   return (
     <QuizzillaView>
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ flex: 1, justifyContent: 'center' }}>
         {data.length > 0 ? (
           <QuizzillaFlashCard cards={data} />
         ) : (

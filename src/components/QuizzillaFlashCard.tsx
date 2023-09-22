@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Swipeable } from 'react-native-gesture-handler';
+import {
+  Directions,
+  Gesture,
+  GestureDetector,
+} from 'react-native-gesture-handler';
 
 import { QuizzillaCard } from '../models/QuizzillaCard';
 
@@ -23,27 +27,34 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
     setIndex((index + 1) % cards.length);
   };
 
+  const swipeGesture = Gesture.Fling()
+    .direction(Directions.LEFT)
+    .onEnd(handleSwipe);
+
   return (
-    <Swipeable
-      containerStyle={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        minWidth: '100%',
-      }}
-      onSwipeableClose={handleSwipe}
-    >
-      <TouchableOpacity
-        aria-label={`card-${index}`}
-        style={styles.card}
-        onPress={handlePress}
-        activeOpacity={0.8}
+    <GestureDetector gesture={swipeGesture}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          minWidth: '100%',
+        }}
       >
-        <View style={styles.cardInner}>
-          <Text style={styles.text}>{showDefinition ? definition : term}</Text>
-        </View>
-      </TouchableOpacity>
-    </Swipeable>
+        <TouchableOpacity
+          aria-label={`card-${index}`}
+          style={styles.card}
+          onPress={handlePress}
+          activeOpacity={0.8}
+        >
+          <View style={styles.cardInner}>
+            <Text style={styles.text}>
+              {showDefinition ? definition : term}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    </GestureDetector>
   );
 };
 
