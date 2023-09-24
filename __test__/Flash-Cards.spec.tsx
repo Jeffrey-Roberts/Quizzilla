@@ -7,7 +7,7 @@ test('renders Flash-Card screen', () => {
   expect(screen.getByLabelText('root')).toBeTruthy();
 });
 
-test('when no data, render No cards on screen', () => {
+test('when no data then no cards are rendered', () => {
   render(<FlashCardScreen />);
   expect(screen.getByText('No cards')).toBeTruthy();
 });

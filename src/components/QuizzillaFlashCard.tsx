@@ -17,7 +17,6 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
   const [index, setIndex] = useState(0);
 
   const { term, definition } = cards[index];
-
   const handlePress = () => {
     setShowDefinition(!showDefinition);
   };

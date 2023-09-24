@@ -1,9 +1,4 @@
-import {
-  render,
-  screen,
-  userEvent,
-  waitFor,
-} from '@testing-library/react-native';
+import { act, render, screen, userEvent } from '@testing-library/react-native';
 
 import QuizzillaFlashCard from '../../src/components/QuizzillaFlashCard';
 
@@ -19,7 +14,7 @@ test('renders QuizzillaFlashCard component on screen', () => {
   expect(screen.getByText('Term')).toBeTruthy();
 });
 
-test.skip('on press of card, definition of card is shown', async () => {
+test('when user taps on card then definition is shown', async () => {
   const user = userEvent.setup();
   const { getByLabelText } = render(
     <QuizzillaFlashCard
@@ -28,8 +23,9 @@ test.skip('on press of card, definition of card is shown', async () => {
     {}
   );
   const card = getByLabelText('card-0');
-  await waitFor(() => {
-    user.press(card);
+
+  await act(async () => {
+    await user.press(card);
     expect(screen.getByText('Definition')).toBeTruthy();
   });
 });
