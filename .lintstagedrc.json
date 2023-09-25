@@ -1,8 +1,8 @@
 {
   "**/*.{js,jsx,ts,tsx}": [
-    "npm run fix:prettier",
-    "npm run check:lint --max-warnings=0",
-    "npm run test -- --findRelatedTests --passWithNoTests"
+    "prettier --config .prettierrc.cjs --write '**/*.{ts,tsx,js,jsx}'",
+    "eslint . --ext .js,.jsx,.ts,.tsx --fix --max-warnings=0",
+    "jest -- --findRelatedTests --passWithNoTests"
   ],
   "*.html": [
     "eslint",
