@@ -1,6 +1,7 @@
 import Constants from 'expo-constants';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 type QuizzillaViewProps = {
   children: React.ReactNode;
@@ -8,9 +9,9 @@ type QuizzillaViewProps = {
 
 const QuizzillaView = ({ children }: QuizzillaViewProps) => {
   return (
-    <View aria-label={'root'} style={styles.container}>
+    <GestureHandlerRootView aria-label={'root'} style={styles.container}>
       {children}
-    </View>
+    </GestureHandlerRootView>
   );
 };
 
