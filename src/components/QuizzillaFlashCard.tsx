@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
-import {
-  Directions,
-  Gesture,
-  GestureDetector,
-} from 'react-native-gesture-handler';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 
 import { QuizzillaCard } from '../models/QuizzillaCard';
 
@@ -17,28 +18,43 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
   const [index, setIndex] = useState(0);
 
   const { term, definition } = cards[index];
+
+  const positionX = useSharedValue(0);
+
   const handlePress = () => {
     setShowDefinition(!showDefinition);
   };
-
   const handleSwipe = () => {
     setShowDefinition(false);
     setIndex((index + 1) % cards.length);
   };
 
-  const swipeGesture = Gesture.Fling()
-    .direction(Directions.LEFT)
-    .onEnd(handleSwipe);
+  const swipeGesture = Gesture.Pan()
+    .runOnJS(true)
+    .onChange((event) => {
+      positionX.value = event.translationX;
+    })
+    .onFinalize(() => {
+      positionX.value = withSpring(0, { stiffness: 50 });
+      handleSwipe();
+    });
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: positionX.value }],
+  }));
 
   return (
     <GestureDetector gesture={swipeGesture}>
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          minWidth: '100%',
-        }}
+      <Animated.View
+        style={[
+          {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            minWidth: '100%',
+          },
+          animatedStyle,
+        ]}
       >
         <TouchableOpacity
           aria-label={`card-${index}`}
@@ -52,7 +68,7 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
             </Text>
           </View>
         </TouchableOpacity>
-      </View>
+      </Animated.View>
     </GestureDetector>
   );
 };
