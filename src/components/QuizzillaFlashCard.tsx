@@ -1,6 +1,10 @@
 import { useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { Text, View, StyleSheet } from 'react-native';
+import {
+  Gesture,
+  GestureDetector,
+  TouchableOpacity,
+} from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -34,9 +38,11 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
     .onChange((event) => {
       positionX.value = event.translationX;
     })
-    .onFinalize(() => {
+    .onFinalize((event) => {
       positionX.value = withSpring(0, { stiffness: 50 });
-      handleSwipe();
+      if (event.translationX > 20 || event.translationX < -20) {
+        handleSwipe();
+      }
     });
 
   const animatedStyle = useAnimatedStyle(() => ({
