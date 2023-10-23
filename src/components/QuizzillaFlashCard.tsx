@@ -21,7 +21,7 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
   const [showDefinition, setShowDefinition] = useState(false);
   const [index, setIndex] = useState(0);
 
-  const { term, definition } = cards[index];
+  const { id, term, definition } = cards[index];
 
   const positionX = useSharedValue(0);
 
@@ -34,6 +34,7 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
   };
 
   const swipeGesture = Gesture.Pan()
+    .withTestId('swipe-gesture')
     .runOnJS(true)
     .onChange((event) => {
       positionX.value = event.translationX;
@@ -45,12 +46,22 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
       }
     });
 
+  const tapGesture = Gesture.Tap()
+    .withTestId('tap-gesture')
+    .runOnJS(true)
+    .maxDistance(20)
+    .onEnd(() => {
+      handlePress();
+    });
+
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: positionX.value }],
   }));
 
+  const composed = Gesture.Simultaneous(swipeGesture, tapGesture);
+
   return (
-    <GestureDetector gesture={swipeGesture}>
+    <GestureDetector gesture={composed}>
       <Animated.View
         style={[
           {
@@ -58,17 +69,13 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
             justifyContent: 'center',
             alignItems: 'center',
             minWidth: '100%',
+            maxHeight: '80%',
           },
           animatedStyle,
         ]}
       >
-        <TouchableOpacity
-          aria-label={`card-${index}`}
-          style={styles.card}
-          onPress={handlePress}
-          activeOpacity={0.8}
-        >
-          <View style={styles.cardInner}>
+        <TouchableOpacity style={styles.card} activeOpacity={0.8}>
+          <View style={styles.cardInner} aria-label={`card-${id}`}>
             <Text style={styles.text}>
               {showDefinition ? definition : term}
             </Text>
@@ -88,7 +95,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     minWidth: '80%',
     maxWidth: '80%',
-    minHeight: '80%',
+    minHeight: '100%',
     marginBottom: 20,
     shadowColor: '#000',
     shadowOffset: {
