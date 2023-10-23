@@ -26,13 +26,13 @@ export default function App() {
       Keyboard.dismiss();
     }
   };
-
   return (
     <QuizzillaView>
       <TextInput
         aria-label={'term input'}
         style={styles.textInput}
         placeholder={'Enter term'}
+        placeholderTextColor={'#000'}
         value={termInputValue}
         onChange={(e) => setTermInputValue(e.nativeEvent.text)}
       />
@@ -40,6 +40,7 @@ export default function App() {
         aria-label={'definition input'}
         style={[styles.textInput, { height: 100 }]}
         placeholder={'Enter definition'}
+        placeholderTextColor={'#000'}
         multiline
         numberOfLines={4}
         value={definitionInputValue}
