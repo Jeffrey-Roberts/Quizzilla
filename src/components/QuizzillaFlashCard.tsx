@@ -20,10 +20,12 @@ type QuizzillaFlashCardProps = {
 const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
   const [showDefinition, setShowDefinition] = useState(false);
   const [index, setIndex] = useState(0);
+  const [cardFlipped, setCardFlipped] = useState(true);
 
   const { id, term, definition } = cards[index];
 
   const positionX = useSharedValue(0);
+  const rotation = useSharedValue('0deg');
 
   const handlePress = () => {
     setShowDefinition(!showDefinition);
@@ -42,6 +44,7 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
     .onFinalize((event) => {
       positionX.value = withSpring(0, { stiffness: 50 });
       if (event.translationX > 20 || event.translationX < -20) {
+        rotation.value = '0deg';
         handleSwipe();
       }
     });
@@ -51,11 +54,19 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
     .runOnJS(true)
     .maxDistance(20)
     .onEnd(() => {
-      handlePress();
+      if (cardFlipped) {
+        rotation.value = withSpring('180deg', { stiffness: 50 });
+        handlePress();
+        setCardFlipped(false);
+      } else {
+        rotation.value = withSpring('0deg', { stiffness: 50 });
+        handlePress();
+        setCardFlipped(true);
+      }
     });
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: positionX.value }],
+    transform: [{ translateX: positionX.value }, { rotateY: rotation.value }],
   }));
 
   const composed = Gesture.Simultaneous(swipeGesture, tapGesture);
@@ -76,9 +87,15 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
       >
         <TouchableOpacity style={styles.card} activeOpacity={0.8}>
           <View style={styles.cardInner} aria-label={`card-${id}`}>
-            <Text style={styles.text}>
-              {showDefinition ? definition : term}
-            </Text>
+            {showDefinition ? (
+              <Text
+                style={[styles.text, { transform: [{ rotateY: '180deg' }] }]}
+              >
+                {definition}
+              </Text>
+            ) : (
+              <Text style={styles.text}>{term}</Text>
+            )}
           </View>
         </TouchableOpacity>
       </Animated.View>
