@@ -1,17 +1,21 @@
 import { useState } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, Dimensions } from 'react-native';
 import {
   Gesture,
   GestureDetector,
   TouchableOpacity,
 } from 'react-native-gesture-handler';
 import Animated, {
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
+  withTiming,
 } from 'react-native-reanimated';
 
 import { QuizzillaCard } from '../models/QuizzillaCard';
+
+const SCREEN_WIDTH = Dimensions.get('screen').width;
 
 type QuizzillaFlashCardProps = {
   cards: QuizzillaCard[];
@@ -29,6 +33,7 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
 
   const handlePress = () => {
     setShowDefinition(!showDefinition);
+    setCardFlipped(!cardFlipped);
   };
   const handleSwipe = () => {
     setShowDefinition(false);
@@ -42,9 +47,20 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
       positionX.value = event.translationX;
     })
     .onFinalize((event) => {
-      positionX.value = withSpring(0, { stiffness: 50 });
       if (event.translationX > 20 || event.translationX < -20) {
+        positionX.value = withTiming(
+          event.translationX > 20 ? SCREEN_WIDTH * 1.8 : SCREEN_WIDTH * -1.8,
+          { duration: 200 },
+          () => {
+            positionX.value =
+              event.translationX > 20
+                ? SCREEN_WIDTH * -1.8
+                : SCREEN_WIDTH * 1.8;
+            positionX.value = withSpring(0, { stiffness: 50 });
+          }
+        );
         rotation.value = '0deg';
+
         handleSwipe();
       }
     });
@@ -56,12 +72,14 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
     .onEnd(() => {
       if (cardFlipped) {
         rotation.value = withSpring('180deg', { stiffness: 50 });
-        handlePress();
-        setCardFlipped(false);
+        setTimeout(() => {
+          runOnJS(handlePress)();
+        }, 200);
       } else {
         rotation.value = withSpring('0deg', { stiffness: 50 });
-        handlePress();
-        setCardFlipped(true);
+        setTimeout(() => {
+          runOnJS(handlePress)();
+        }, 200);
       }
     });
 
