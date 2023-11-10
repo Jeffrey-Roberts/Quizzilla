@@ -25,6 +25,7 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
   const [showDefinition, setShowDefinition] = useState(false);
   const [index, setIndex] = useState(0);
   const [cardFlipped, setCardFlipped] = useState(true);
+  const [cardSwipedFinished, setCardSwipedFinished] = useState(true);
 
   const { id, term, definition } = cards[index];
 
@@ -48,6 +49,7 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
     })
     .onFinalize((event) => {
       if (event.translationX > 20 || event.translationX < -20) {
+        setCardSwipedFinished(false);
         positionX.value = withTiming(
           event.translationX > 20 ? SCREEN_WIDTH * 1.8 : SCREEN_WIDTH * -1.8,
           { duration: 200 },
@@ -56,7 +58,9 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
               event.translationX > 20
                 ? SCREEN_WIDTH * -1.8
                 : SCREEN_WIDTH * 1.8;
-            positionX.value = withSpring(0, { stiffness: 50 });
+            positionX.value = withTiming(0, { duration: 350 }, () =>
+              runOnJS(setCardSwipedFinished)(true)
+            );
           }
         );
         rotation.value = '0deg';
@@ -70,16 +74,18 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
     .runOnJS(true)
     .maxDistance(20)
     .onEnd(() => {
-      if (cardFlipped) {
-        rotation.value = withSpring('180deg', { stiffness: 50 });
-        setTimeout(() => {
-          runOnJS(handlePress)();
-        }, 200);
-      } else {
-        rotation.value = withSpring('0deg', { stiffness: 50 });
-        setTimeout(() => {
-          runOnJS(handlePress)();
-        }, 200);
+      if (cardSwipedFinished) {
+        if (cardFlipped) {
+          rotation.value = withSpring('180deg', { stiffness: 50 });
+          setTimeout(() => {
+            runOnJS(handlePress)();
+          }, 200);
+        } else {
+          rotation.value = withSpring('0deg', { stiffness: 50 });
+          setTimeout(() => {
+            runOnJS(handlePress)();
+          }, 200);
+        }
       }
     });
 
