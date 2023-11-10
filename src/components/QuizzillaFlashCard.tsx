@@ -1,17 +1,21 @@
 import { useState } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, Dimensions } from 'react-native';
 import {
   Gesture,
   GestureDetector,
   TouchableOpacity,
 } from 'react-native-gesture-handler';
 import Animated, {
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
+  withTiming,
 } from 'react-native-reanimated';
 
 import { QuizzillaCard } from '../models/QuizzillaCard';
+
+const SCREEN_WIDTH = Dimensions.get('screen').width;
 
 type QuizzillaFlashCardProps = {
   cards: QuizzillaCard[];
@@ -20,13 +24,16 @@ type QuizzillaFlashCardProps = {
 const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
   const [showDefinition, setShowDefinition] = useState(false);
   const [index, setIndex] = useState(0);
+  const [cardFlipped, setCardFlipped] = useState(true);
 
   const { id, term, definition } = cards[index];
 
   const positionX = useSharedValue(0);
+  const rotation = useSharedValue('0deg');
 
   const handlePress = () => {
     setShowDefinition(!showDefinition);
+    setCardFlipped(!cardFlipped);
   };
   const handleSwipe = () => {
     setShowDefinition(false);
@@ -40,8 +47,20 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
       positionX.value = event.translationX;
     })
     .onFinalize((event) => {
-      positionX.value = withSpring(0, { stiffness: 50 });
       if (event.translationX > 20 || event.translationX < -20) {
+        positionX.value = withTiming(
+          event.translationX > 20 ? SCREEN_WIDTH * 1.8 : SCREEN_WIDTH * -1.8,
+          { duration: 200 },
+          () => {
+            positionX.value =
+              event.translationX > 20
+                ? SCREEN_WIDTH * -1.8
+                : SCREEN_WIDTH * 1.8;
+            positionX.value = withSpring(0, { stiffness: 50 });
+          }
+        );
+        rotation.value = '0deg';
+
         handleSwipe();
       }
     });
@@ -51,11 +70,21 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
     .runOnJS(true)
     .maxDistance(20)
     .onEnd(() => {
-      handlePress();
+      if (cardFlipped) {
+        rotation.value = withSpring('180deg', { stiffness: 50 });
+        setTimeout(() => {
+          runOnJS(handlePress)();
+        }, 200);
+      } else {
+        rotation.value = withSpring('0deg', { stiffness: 50 });
+        setTimeout(() => {
+          runOnJS(handlePress)();
+        }, 200);
+      }
     });
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: positionX.value }],
+    transform: [{ translateX: positionX.value }, { rotateY: rotation.value }],
   }));
 
   const composed = Gesture.Simultaneous(swipeGesture, tapGesture);
@@ -76,9 +105,15 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
       >
         <TouchableOpacity style={styles.card} activeOpacity={0.8}>
           <View style={styles.cardInner} aria-label={`card-${id}`}>
-            <Text style={styles.text}>
-              {showDefinition ? definition : term}
-            </Text>
+            {showDefinition ? (
+              <Text
+                style={[styles.text, { transform: [{ rotateY: '180deg' }] }]}
+              >
+                {definition}
+              </Text>
+            ) : (
+              <Text style={styles.text}>{term}</Text>
+            )}
           </View>
         </TouchableOpacity>
       </Animated.View>
