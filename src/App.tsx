@@ -26,6 +26,11 @@ export default function App() {
       Keyboard.dismiss();
     }
   };
+
+  const handleDelete = (id: number) => {
+    setData({ type: 'REMOVE_CARD', payload: id });
+  };
+
   return (
     <QuizzillaView>
       <TextInput
@@ -59,6 +64,7 @@ export default function App() {
               id={item.id}
               term={item.term}
               definition={item.definition}
+              handleDelete={handleDelete}
             />
           )}
           keyExtractor={(item) => item.id.toString()}
