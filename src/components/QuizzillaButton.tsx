@@ -20,7 +20,7 @@ const QuizzillaButton: FC<QuizzillaButtonProps> = ({
         backgroundColor: '#7f5af0',
         padding: 10,
         borderRadius: 5,
-        width: '80%',
+        width: '100%',
         alignItems: 'center',
       }}
     >
