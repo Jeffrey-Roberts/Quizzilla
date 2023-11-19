@@ -1,8 +1,9 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { FC, useState } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import QuizzillaButton from './QuizzillaButton';
+import QuizzillaTextBox from './QuizzillaTextBox';
 import { QuizzillaCard } from '../models/QuizzillaCard';
 
 export type CardProps = {
@@ -70,19 +71,16 @@ const QuizzillaDisplayCard: FC<CardProps> = ({
       ) : (
         <>
           <View style={{ flex: 1 }}>
-            <TextInput
-              aria-label={'term input'}
-              style={styles.textInput}
+            <QuizzillaTextBox
+              label={'term input'}
               placeholder={'Enter term'}
-              placeholderTextColor={'#000'}
               value={termInputValue}
               onChange={(e) => setTermInputValue(e.nativeEvent.text)}
             />
-            <TextInput
-              aria-label={'definition input'}
-              style={[styles.textInput, { height: 100 }]}
+            <QuizzillaTextBox
+              label={'definition input'}
+              style={{ height: 100 }}
               placeholder={'Enter definition'}
-              placeholderTextColor={'#000'}
               multiline
               numberOfLines={4}
               value={definitionInputValue}
@@ -131,13 +129,5 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 2,
     overflow: 'hidden',
-  },
-  textInput: {
-    width: '100%',
-    fontWeight: 'bold',
-    backgroundColor: '#fff',
-    padding: 15,
-    borderRadius: 5,
-    marginBottom: 10,
   },
 });

@@ -1,9 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import { useContext, useState } from 'react';
-import { FlatList, TextInput, StyleSheet, View, Keyboard } from 'react-native';
+import { FlatList, Keyboard, StyleSheet, View } from 'react-native';
 
 import QuizzillaButton from './components/QuizzillaButton';
 import QuizzillaDisplayCard from './components/QuizzillaDisplayCard';
+import QuizzillaTextBox from './components/QuizzillaTextBox';
 import QuizzillaView from './components/QuizzillaView';
 import { QuizzillaCard } from './models/QuizzillaCard';
 import { QuizzillaContext } from './modules/QuizzillaContext';
@@ -39,19 +40,16 @@ export default function App() {
   return (
     <QuizzillaView>
       <View style={{ width: '80%' }}>
-        <TextInput
-          aria-label={'term input'}
-          style={styles.textInput}
+        <QuizzillaTextBox
+          label={'term input'}
           placeholder={'Enter term'}
-          placeholderTextColor={'#000'}
           value={termInputValue}
           onChange={(e) => setTermInputValue(e.nativeEvent.text)}
         />
-        <TextInput
-          aria-label={'definition input'}
-          style={[styles.textInput, { height: 100 }]}
+        <QuizzillaTextBox
+          label={'definition input'}
+          style={{ height: 100 }}
           placeholder={'Enter definition'}
-          placeholderTextColor={'#000'}
           multiline
           numberOfLines={4}
           value={definitionInputValue}
@@ -90,14 +88,6 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  textInput: {
-    width: '100%',
-    fontWeight: 'bold',
-    backgroundColor: '#fff',
-    padding: 15,
-    borderRadius: 5,
-    marginBottom: 10,
-  },
   innerContainer: {
     flex: 1,
     width: '100%',
