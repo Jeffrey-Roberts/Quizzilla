@@ -64,11 +64,36 @@ test('when edit button is pressed then input boxes appear with current values', 
   const editButton = getByLabelText(`edit card ${id}`);
   await act(async () => {
     await user.press(editButton);
-    const termInput = getByLabelText('term input');
-    const definitionInput = getByLabelText('definition input');
+    const termInput = getByLabelText('edit term input');
+    const definitionInput = getByLabelText('edit definition input');
     expect(termInput).toBeDefined();
     expect(definitionInput).toBeDefined();
     expect(getTextInputValue(termInput)).toBe(term);
     expect(getTextInputValue(definitionInput)).toBe(definition);
+  });
+});
+
+test('when submit button in edit mode is pressed then handleEdit is called', async () => {
+  const user = userEvent.setup();
+  const id = 0;
+  const term = 'test term';
+  const definition = 'test definition';
+  const handleDelete = jest.fn();
+  const handleEdit = jest.fn();
+  const { getByLabelText } = render(
+    <QuizzillaDisplayCard
+      id={id}
+      term={term}
+      definition={definition}
+      handleDelete={handleDelete}
+      handleEdit={handleEdit}
+    />
+  );
+  const editButton = getByLabelText(`edit card ${id}`);
+  await act(async () => {
+    await user.press(editButton);
+    const submitButton = getByLabelText('submit edits button');
+    await user.press(submitButton);
+    expect(handleEdit).toHaveBeenCalled();
   });
 });

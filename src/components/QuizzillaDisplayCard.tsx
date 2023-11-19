@@ -72,13 +72,13 @@ const QuizzillaDisplayCard: FC<CardProps> = ({
         <>
           <View style={{ flex: 1 }}>
             <QuizzillaTextBox
-              label={'term input'}
+              label={'edit term input'}
               placeholder={'Enter term'}
               value={termInputValue}
               onChange={(e) => setTermInputValue(e.nativeEvent.text)}
             />
             <QuizzillaTextBox
-              label={'definition input'}
+              label={'edit definition input'}
               style={{ height: 100 }}
               placeholder={'Enter definition'}
               multiline
@@ -88,6 +88,7 @@ const QuizzillaDisplayCard: FC<CardProps> = ({
             />
             <QuizzillaButton
               text={'Submit'}
+              label={'submit edits button'}
               onPress={() => {
                 if (termInputValue && definitionInputValue) {
                   const updatedCard: QuizzillaCard = {
