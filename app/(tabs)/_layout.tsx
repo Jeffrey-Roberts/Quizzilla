@@ -10,6 +10,7 @@ export default function HomeLayout() {
         tabBarActiveTintColor: '#7f5af0',
         headerShown: false,
         tabBarStyle: { backgroundColor: 'black', borderTopWidth: 0 },
+        tabBarHideOnKeyboard: true,
       }}
     >
       <Tabs.Screen

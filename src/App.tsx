@@ -1,6 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import { useContext, useState } from 'react';
-import { FlatList, Keyboard, StyleSheet, View } from 'react-native';
+import {
+  FlatList,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  View,
+} from 'react-native';
 
 import QuizzillaButton from './components/QuizzillaButton';
 import QuizzillaDisplayCard from './components/QuizzillaDisplayCard';
@@ -61,7 +68,10 @@ export default function App() {
           onPress={handleAdd}
         />
       </View>
-      <View style={styles.innerContainer}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={styles.innerContainer}
+      >
         <FlatList
           data={data}
           renderItem={({ item }) => (
@@ -81,7 +91,7 @@ export default function App() {
           }}
           extraData={data}
         />
-      </View>
+      </KeyboardAvoidingView>
       <StatusBar style={'light'} />
     </QuizzillaView>
   );
