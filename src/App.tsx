@@ -90,6 +90,7 @@ export default function App() {
             flexGrow: 1,
           }}
           extraData={data}
+          removeClippedSubviews={false}
         />
       </KeyboardAvoidingView>
       <StatusBar style={'light'} />
