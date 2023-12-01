@@ -1,6 +1,6 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { FC, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { FC, useRef, useState } from 'react';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
 
 import QuizzillaButton from './QuizzillaButton';
 import QuizzillaTextBox from './QuizzillaTextBox';
@@ -24,14 +24,25 @@ const QuizzillaDisplayCard: FC<CardProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [termInputValue, setTermInputValue] = useState(term);
   const [definitionInputValue, setDefinitionInputValue] = useState(definition);
+  const definitionTextInputRef = useRef<TextInput>(null);
+
+  const focusTextInput = () => {
+    if (definitionTextInputRef.current) {
+      definitionTextInputRef.current.focus();
+    }
+  };
 
   return (
     <View aria-label={`card-${id}`} style={styles.flashCard}>
       {!isEditing ? (
         <>
-          <View>
+          <View style={{ width: '80%' }}>
             <Text
-              style={{ fontSize: 20, fontWeight: 'bold', color: '#fffffe' }}
+              style={{
+                fontSize: 20,
+                fontWeight: 'bold',
+                color: '#fffffe',
+              }}
             >
               {term}
             </Text>
@@ -72,19 +83,22 @@ const QuizzillaDisplayCard: FC<CardProps> = ({
         <>
           <View style={{ flex: 1 }}>
             <QuizzillaTextBox
-              label={'edit term input'}
+              aria-label={'edit term input'}
               placeholder={'Enter term'}
               value={termInputValue}
               onChange={(e) => setTermInputValue(e.nativeEvent.text)}
+              onSubmitEditing={focusTextInput}
+              blurOnSubmit={false}
             />
             <QuizzillaTextBox
-              label={'edit definition input'}
+              aria-label={'edit definition input'}
               style={{ height: 100 }}
               placeholder={'Enter definition'}
               multiline
               numberOfLines={4}
               value={definitionInputValue}
               onChange={(e) => setDefinitionInputValue(e.nativeEvent.text)}
+              ref={definitionTextInputRef}
             />
             <QuizzillaButton
               text={'Submit'}

@@ -1,38 +1,11 @@
-import { FC } from 'react';
-import { StyleSheet, TextInput } from 'react-native';
+import { forwardRef } from 'react';
+import { StyleSheet, TextInput, TextInputProps } from 'react-native';
 
-export type QuizzillaTextBoxProps = {
-  value: string;
-  label: string;
-  placeholder?: string;
-  multiline?: boolean;
-  numberOfLines?: number;
-  style?: object;
-  onChange?: (e: any) => void;
-};
-
-const QuizzillaTextBox: FC<QuizzillaTextBoxProps> = ({
-  value,
-  label,
-  placeholder,
-  multiline,
-  numberOfLines,
-  style,
-  onChange,
-}) => {
+const QuizzillaTextBox = forwardRef<TextInput, TextInputProps>((props, ref) => {
   return (
-    <TextInput
-      aria-label={label}
-      style={[styles.textInput, style]}
-      placeholder={placeholder}
-      placeholderTextColor={'#000'}
-      multiline={multiline}
-      numberOfLines={numberOfLines}
-      value={value}
-      onChange={onChange}
-    />
+    <TextInput {...props} style={[styles.textInput, props.style]} ref={ref} />
   );
-};
+});
 
 export default QuizzillaTextBox;
 

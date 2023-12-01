@@ -1,11 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
-import { useContext, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import {
   FlatList,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
+  TextInput,
   View,
 } from 'react-native';
 
@@ -21,6 +22,8 @@ export default function App() {
 
   const [termInputValue, setTermInputValue] = useState('');
   const [definitionInputValue, setDefinitionInputValue] = useState('');
+
+  const definitionTextInputRef = useRef<TextInput>(null);
 
   const handleAdd = () => {
     if (termInputValue && definitionInputValue) {
@@ -44,19 +47,30 @@ export default function App() {
     setData({ type: 'UPDATE_CARD', payload: card });
   };
 
+  const focusTextInput = () => {
+    if (definitionTextInputRef.current) {
+      definitionTextInputRef.current.focus();
+    }
+  };
+
   return (
     <QuizzillaView>
       <View style={{ width: '80%' }}>
         <QuizzillaTextBox
-          label={'term input'}
+          aria-label={'term input'}
           placeholder={'Enter term'}
+          placeholderTextColor={'#94a1b2'}
           value={termInputValue}
           onChange={(e) => setTermInputValue(e.nativeEvent.text)}
+          onSubmitEditing={focusTextInput}
+          blurOnSubmit={false}
         />
         <QuizzillaTextBox
-          label={'definition input'}
+          aria-label={'definition input'}
+          ref={definitionTextInputRef}
           style={{ height: 100 }}
           placeholder={'Enter definition'}
+          placeholderTextColor={'#94a1b2'}
           multiline
           numberOfLines={4}
           value={definitionInputValue}
