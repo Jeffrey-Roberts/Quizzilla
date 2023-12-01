@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Dimensions } from 'react-native';
 import {
   Gesture,
@@ -33,13 +33,26 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
   const positionX = useSharedValue(0);
   const rotation = useSharedValue('0deg');
 
+  useEffect(() => {
+    setShowDefinition(false);
+    setCardFlipped(true);
+    setCardSwipedFinished(true);
+    setIndex(0);
+    rotation.value = '0deg';
+  }, [cards]);
+
   const handlePress = () => {
     setShowDefinition(!showDefinition);
     setCardFlipped(!cardFlipped);
   };
-  const handleSwipe = () => {
+  const handleSwipe = (direction: 'right' | 'left') => {
+    console.log(direction);
     setShowDefinition(false);
-    setIndex((index + 1) % cards.length);
+    if (direction === 'right') {
+      setIndex((index - 1 + cards.length) % cards.length);
+    } else if (direction === 'left') {
+      setIndex((index + 1) % cards.length);
+    }
   };
 
   const swipeGesture = Gesture.Pan()
@@ -66,7 +79,7 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
         );
         rotation.value = '0deg';
 
-        handleSwipe();
+        handleSwipe(event.translationX > 0 ? 'right' : 'left');
       }
     });
 
