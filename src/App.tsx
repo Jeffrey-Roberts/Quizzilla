@@ -35,8 +35,8 @@ export default function App() {
       setData({ type: 'ADD_CARD', payload: newData });
       setTermInputValue('');
       setDefinitionInputValue('');
-      Keyboard.dismiss();
     }
+    Keyboard.dismiss();
   };
 
   const handleDelete = (id: number) => {
@@ -105,6 +105,7 @@ export default function App() {
           }}
           extraData={data}
           removeClippedSubviews={false}
+          keyboardShouldPersistTaps={'always'}
         />
       </KeyboardAvoidingView>
       <StatusBar style={'light'} />

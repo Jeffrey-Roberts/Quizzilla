@@ -27,7 +27,8 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
   const [cardFlipped, setCardFlipped] = useState(true);
   const [cardSwipedFinished, setCardSwipedFinished] = useState(true);
 
-  const { id, term, definition } = cards[index];
+  const card = cards[index];
+  const { id = null, term = '', definition = '' } = card || {};
 
   const positionX = useSharedValue(0);
   const rotation = useSharedValue('0deg');
