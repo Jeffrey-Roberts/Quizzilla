@@ -46,7 +46,6 @@ const QuizzillaFlashCard = ({ cards }: QuizzillaFlashCardProps) => {
     setCardFlipped(!cardFlipped);
   };
   const handleSwipe = (direction: 'right' | 'left') => {
-    console.log(direction);
     setShowDefinition(false);
     if (direction === 'right') {
       setIndex((index - 1 + cards.length) % cards.length);
