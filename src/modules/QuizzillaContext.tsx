@@ -1,7 +1,7 @@
-import axios from 'axios';
 import React, { createContext, Dispatch, useEffect, useReducer } from 'react';
 
-import { QuizzillaCard, QuizzillaCardDTO } from '../models/QuizzillaCard';
+import { fetchTerms } from '../api/endpoints';
+import { QuizzillaCard } from '../models/QuizzillaCard';
 
 type QuizzillaContextType = {
   data: QuizzillaCard[];
@@ -32,14 +32,6 @@ const dataReducer = (state: QuizzillaCard[], action: any) => {
   }
 };
 
-const transformData = (data: QuizzillaCardDTO[]): QuizzillaCard[] => {
-  return data.map((item) => ({
-    id: item.id,
-    term: item.name,
-    definition: item.description,
-  }));
-};
-
 type Props = {
   children: React.ReactNode;
 };
@@ -49,9 +41,8 @@ export const QuizzillaCProvider = ({ children }: Props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/terms');
-        const transformedData = transformData(response.data);
-        setData({ type: 'SET_DATA', payload: transformedData });
+        const response = await fetchTerms();
+        setData({ type: 'SET_DATA', payload: response });
       } catch (error) {
         console.error(error);
       }
