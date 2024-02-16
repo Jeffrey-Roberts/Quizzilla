@@ -3,3 +3,9 @@ export type QuizzillaCard = {
   term: string;
   definition: string;
 };
+
+export type QuizzillaCardDTO = {
+  id: number;
+  name: string;
+  description: string;
+};
