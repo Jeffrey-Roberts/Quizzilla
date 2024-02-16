@@ -21,6 +21,7 @@
     "@babel/plugin-transform-shorthand-properties": "^7.0.0-0",
     "@babel/plugin-transform-template-literals": "^7.0.0-0",
     "@babel/preset-env": "^7.1.6",
+    "axios": "^1.6.7",
     "expo": "~49.0.8",
     "expo-constants": "~14.4.2",
     "expo-doctor": "^1.1.3",
