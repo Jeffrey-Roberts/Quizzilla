@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 
+import { postTerm } from './api/endpoints';
 import QuizzillaButton from './components/QuizzillaButton';
 import QuizzillaDisplayCard from './components/QuizzillaDisplayCard';
 import QuizzillaTextBox from './components/QuizzillaTextBox';
@@ -32,7 +33,9 @@ export default function App() {
         term: termInputValue,
         definition: definitionInputValue,
       };
-      setData({ type: 'ADD_CARD', payload: newData });
+      postTerm(newData).then((response) => {
+        setData({ type: 'ADD_CARD', payload: response });
+      });
       setTermInputValue('');
       setDefinitionInputValue('');
     }

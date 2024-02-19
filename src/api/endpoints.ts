@@ -9,7 +9,23 @@ const transformData = (data: QuizzillaCardDTO[]): QuizzillaCard[] => {
   }));
 };
 
+const transformDataBack = (data: QuizzillaCard): QuizzillaCardDTO => {
+  return {
+    id: data.id,
+    name: data.term,
+    description: data.definition,
+  };
+};
+
 export const fetchTerms = async (): Promise<QuizzillaCard[]> => {
   const response = await api.get('http://localhost:8080/terms');
   return transformData(response.data);
+};
+
+export const postTerm = async (term: QuizzillaCard): Promise<QuizzillaCard> => {
+  const response = await api.post(
+    'http://localhost:8080/term',
+    transformDataBack(term)
+  );
+  return transformData([response.data])[0];
 };
