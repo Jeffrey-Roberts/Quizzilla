@@ -10,6 +10,8 @@ jest.mock('axios');
 
 describe('App', () => {
   let mockPost: jest.MockedFunction<typeof axios.post>;
+  let deletePost: jest.MockedFunction<typeof axios.delete>;
+
   let user: ReturnType<typeof userEvent.setup>;
   let termInput: HTMLElement;
   let definitionInput: HTMLElement;
@@ -20,6 +22,9 @@ describe('App', () => {
     mockPost.mockResolvedValue({
       data: { id: 1, term: 'Test Term', definition: 'Test Definition' },
     });
+
+    deletePost = axios.delete as jest.MockedFunction<typeof axios.delete>;
+    deletePost.mockResolvedValue({});
 
     const { getByLabelText } = render(
       <QuizzillaCProvider>
@@ -111,6 +116,7 @@ describe('App', () => {
   });
 
   test('when user deletes card then card is removed', async () => {
+    const id = 1;
     const term = 'Test Term';
     const definition = 'Test Definition';
 
@@ -124,6 +130,12 @@ describe('App', () => {
     );
 
     await user.press(screen.getByLabelText('delete card 1'));
+
+    await act(async () => {
+      expect(deletePost).toHaveBeenCalledWith(
+        `http://localhost:8080/term/${id}`
+      );
+    });
     expect(screen.queryByLabelText('card-1')).toBeFalsy();
   });
 

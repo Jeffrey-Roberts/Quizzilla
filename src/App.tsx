@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 
-import { postTerm } from './api/endpoints';
+import { deleteTerm, postTerm } from './api/endpoints';
 import QuizzillaButton from './components/QuizzillaButton';
 import QuizzillaDisplayCard from './components/QuizzillaDisplayCard';
 import QuizzillaTextBox from './components/QuizzillaTextBox';
@@ -43,7 +43,9 @@ export default function App() {
   };
 
   const handleDelete = (id: number) => {
-    setData({ type: 'REMOVE_CARD', payload: id });
+    deleteTerm(id).then(() => {
+      setData({ type: 'REMOVE_CARD', payload: id });
+    });
   };
 
   const handleEdit = (card: QuizzillaCard) => {

@@ -29,3 +29,7 @@ export const postTerm = async (term: QuizzillaCard): Promise<QuizzillaCard> => {
   );
   return transformData([response.data])[0];
 };
+
+export const deleteTerm = async (id: number): Promise<void> => {
+  await api.delete(`http://localhost:8080/term/${id}`);
+};
