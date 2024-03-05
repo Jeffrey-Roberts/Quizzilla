@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 
-import { deleteTerm, postTerm } from './api/endpoints';
+import { deleteTerm, editTerm, postTerm } from './api/endpoints';
 import QuizzillaButton from './components/QuizzillaButton';
 import QuizzillaDisplayCard from './components/QuizzillaDisplayCard';
 import QuizzillaTextBox from './components/QuizzillaTextBox';
@@ -49,7 +49,9 @@ export default function App() {
   };
 
   const handleEdit = (card: QuizzillaCard) => {
-    setData({ type: 'UPDATE_CARD', payload: card });
+    editTerm(card).then((response) => {
+      setData({ type: 'UPDATE_CARD', payload: response });
+    });
   };
 
   const focusTextInput = () => {

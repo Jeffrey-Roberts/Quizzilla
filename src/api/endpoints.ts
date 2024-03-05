@@ -33,3 +33,11 @@ export const postTerm = async (term: QuizzillaCard): Promise<QuizzillaCard> => {
 export const deleteTerm = async (id: number): Promise<void> => {
   await api.delete(`http://localhost:8080/term/${id}`);
 };
+
+export const editTerm = async (term: QuizzillaCard): Promise<QuizzillaCard> => {
+  const response = await api.put(
+    `http://localhost:8080/term/${term.id}`,
+    transformDataBack(term)
+  );
+  return transformData([response.data])[0];
+};

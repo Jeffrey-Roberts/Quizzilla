@@ -1,4 +1,10 @@
-import { render, act, screen, userEvent } from '@testing-library/react-native';
+import {
+  render,
+  act,
+  screen,
+  userEvent,
+  waitFor,
+} from '@testing-library/react-native';
 import { UserEventInstance } from '@testing-library/react-native/build/user-event/setup';
 import axios from 'axios';
 import React from 'react';
@@ -10,7 +16,8 @@ jest.mock('axios');
 
 describe('App', () => {
   let mockPost: jest.MockedFunction<typeof axios.post>;
-  let deletePost: jest.MockedFunction<typeof axios.delete>;
+  let mockDelete: jest.MockedFunction<typeof axios.delete>;
+  let mockEdit: jest.MockedFunction<typeof axios.put>;
 
   let user: ReturnType<typeof userEvent.setup>;
   let termInput: HTMLElement;
@@ -20,11 +27,16 @@ describe('App', () => {
   beforeEach(() => {
     mockPost = axios.post as jest.MockedFunction<typeof axios.post>;
     mockPost.mockResolvedValue({
-      data: { id: 1, term: 'Test Term', definition: 'Test Definition' },
+      data: { id: 1, name: 'Test Term', description: 'Test Definition' },
     });
 
-    deletePost = axios.delete as jest.MockedFunction<typeof axios.delete>;
-    deletePost.mockResolvedValue({});
+    mockDelete = axios.delete as jest.MockedFunction<typeof axios.delete>;
+    mockDelete.mockResolvedValue({});
+
+    mockEdit = axios.put as jest.MockedFunction<typeof axios.put>;
+    mockEdit.mockResolvedValue({
+      data: { id: 1, name: 'Updated Term', description: 'Updated Definition' },
+    });
 
     const { getByLabelText } = render(
       <QuizzillaCProvider>
@@ -132,7 +144,7 @@ describe('App', () => {
     await user.press(screen.getByLabelText('delete card 1'));
 
     await act(async () => {
-      expect(deletePost).toHaveBeenCalledWith(
+      expect(mockDelete).toHaveBeenCalledWith(
         `http://localhost:8080/term/${id}`
       );
     });
@@ -140,6 +152,7 @@ describe('App', () => {
   });
 
   test('when user edits card then card is updated', async () => {
+    const id = 1;
     const term = 'Test Term';
     const definition = 'Test Definition';
 
@@ -160,17 +173,32 @@ describe('App', () => {
       );
       const submitEditsButton = screen.getByLabelText('submit edits button');
 
-      const newTerm = 'New Term';
-      const newDefinition = 'New Definition';
-      await user.clear(editTermInput);
-      await user.type(editTermInput, newTerm);
-      await user.clear(editDefinitionInput);
-      await user.type(editDefinitionInput, newDefinition);
+      const newTerm = 'Updated Term';
+      const newDefinition = 'Updated Definition';
 
-      await user.press(submitEditsButton);
+      await act(async () => {
+        await user.clear(editTermInput);
+        await user.type(editTermInput, newTerm);
+        await user.clear(editDefinitionInput);
+        await user.type(editDefinitionInput, newDefinition);
 
-      expect(screen.getByText(newTerm)).toBeTruthy();
-      expect(screen.getByText(newDefinition)).toBeTruthy();
+        await user.press(submitEditsButton);
+      });
+
+      await act(async () => {
+        expect(mockEdit).toHaveBeenCalledWith(
+          `http://localhost:8080/term/${id}`,
+          {
+            id: 1,
+            name: newTerm,
+            description: newDefinition,
+          }
+        );
+      });
+      await waitFor(() => {
+        expect(screen.getByText(newTerm)).toBeTruthy();
+        expect(screen.getByText(newDefinition)).toBeTruthy();
+      });
     });
   });
 });
