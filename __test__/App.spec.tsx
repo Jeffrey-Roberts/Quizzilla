@@ -1,10 +1,4 @@
-import {
-  render,
-  act,
-  screen,
-  userEvent,
-  waitFor,
-} from '@testing-library/react-native';
+import { render, act, screen, userEvent } from '@testing-library/react-native';
 import { UserEventInstance } from '@testing-library/react-native/build/user-event/setup';
 import axios from 'axios';
 import React from 'react';
@@ -79,6 +73,8 @@ describe('App', () => {
       });
     });
     expect(screen.getByLabelText('card-1')).toBeTruthy();
+    expect(screen.getByText(term)).toBeTruthy();
+    expect(screen.getByText(definition)).toBeTruthy();
   });
 
   test('given no term with definition when user submits form then no card is added', async () => {
@@ -195,10 +191,8 @@ describe('App', () => {
           }
         );
       });
-      await waitFor(() => {
-        expect(screen.getByText(newTerm)).toBeTruthy();
-        expect(screen.getByText(newDefinition)).toBeTruthy();
-      });
+      expect(screen.getByText(newTerm)).toBeTruthy();
+      expect(screen.getByText(newDefinition)).toBeTruthy();
     });
   });
 });
